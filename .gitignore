@@ -1,3 +1,5 @@
 memory-bank/
 .clinerules
 docs/
+.venv/
+*.pyc
