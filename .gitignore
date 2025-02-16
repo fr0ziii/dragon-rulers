@@ -3,3 +3,4 @@ memory-bank/
 docs/
 .venv/
 *.pyc
+node_modules/
