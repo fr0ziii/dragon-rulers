@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div style="text-align: center; width: 100%;">
    <img src="cover.jpeg" width="300" />
 </div>
 
