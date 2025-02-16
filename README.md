@@ -1,4 +1,4 @@
-<center>(<cover.jpeg>)</center>
+<div style="text-align: center;">![Banner](<cover.jpeg>)</div>
 
 # Dragon Rulers Multi-Agent DLT
 
