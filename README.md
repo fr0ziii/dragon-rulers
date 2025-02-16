@@ -1,6 +1,4 @@
-<div style="text-align: center; width: 100%;">
-   <img src="cover.jpeg" width="300" />
-</div>
+<img src="cover.jpeg" width="300" />
 
 # Dragon Rulers Multi-Agent DLT
 
