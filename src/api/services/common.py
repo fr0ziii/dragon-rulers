@@ -30,7 +30,7 @@ producer = Producer(kafka_conf)
 
 # --- CORS Configuration ---
 origins = [
-    "http://localhost:3002",  # Frontend URL
+    "http://localhost:3000",  # Frontend URL
 ]
 
 def setup_cors(app: FastAPI):

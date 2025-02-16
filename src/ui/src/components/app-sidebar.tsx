@@ -12,6 +12,11 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  Home,
+  Component,
+  ChartArea,
+  Speech,
+  Link
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -26,6 +31,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { getAgents } from "@/lib/api"; // Import the API function
+import { Collapsible } from "@radix-ui/react-collapsible"
 
 // This is sample data.
 const data = {
@@ -51,93 +57,48 @@ const data = {
       plan: "Free",
     },
   ],
-  // navMain: [ // Remove static navMain
-  //   {
-  //     title: "Playground",
-  //     url: "#",
-  //     icon: SquareTerminal,
-  //     isActive: true,
-  //     items: [
-  //       {
-  //         title: "History",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Starred",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Settings",
-  //         url: "#",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: "Models",
-  //     url: "#",
-  //     icon: Bot,
-  //     items: [
-  //       {
-  //         title: "Genesis",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Explorer",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Quantum",
-  //         url: "#",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: "Documentation",
-  //     url: "#",
-  //     icon: BookOpen,
-  //     items: [
-  //       {
-  //         title: "Introduction",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Get Started",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Tutorials",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Changelog",
-  //         url: "#",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     title: "Settings",
-  //     url: "#",
-  //     icon: Settings2,
-  //     items: [
-  //       {
-  //         title: "General",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Team",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Billing",
-  //         url: "#",
-  //       },
-  //       {
-  //         title: "Limits",
-  //         url: "#",
-  //       },
-  //     ],
-  //   },
-  // ],
+   navMain: [ // Remove static navMain
+     {
+       title: "Home",
+       url: "#",
+       icon: Home,
+       Collapsible: false,
+       isActive: true,
+       items: [
+         {
+           title: "Dashboard",
+           url: "/dashboard",
+         },
+       ],
+     },
+     {
+       title: "Models",
+       url: "#",
+       icon: Component,
+       items: [
+         {
+           title: "Agents",
+           url: "#",
+           icon: Bot,
+         },
+         {
+           title: "Strategies",
+           url: "#",
+           icon: ChartArea
+         },
+         {
+           title: "Swarms",
+           url: "#",
+           icon: Speech
+         },
+         {
+          title: "Blockchains",
+          url: "#",
+          icon: Link
+        },
+       ],
+     },
+   ],
   projects: [
     {
       name: "Design Engineering",
@@ -186,7 +147,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        {/* <NavMain items={data.navMain} /> */}
+        { <NavMain items={data.navMain} /> }
         <NavMain items={navItems} />
         <NavProjects projects={data.projects} />
       </SidebarContent>
