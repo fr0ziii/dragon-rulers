@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from src.api.models.strategy import Strategy, StrategyCreate
+from src.api.models.strategy import Strategy, StrategyCreate, ID, NAME, DESCRIPTION, CODE, PARAMETERS_SCHEMA
 from src.data.db import supabase
 import logging
 from uuid import UUID
+
+STRATEGIES_TABLE = "strategies"
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +18,7 @@ router = APIRouter(
 async def create_strategy(strategy_create: StrategyCreate):
     logger.info(f"POST /strategies - Creating strategy: {strategy_create.name}")
     try:
-        data, count = supabase.table("strategies").insert(strategy_create.dict()).execute()
+        data, count = supabase.table(STRATEGIES_TABLE).insert(strategy_create.dict()).execute()
         strategy_data = data[1][0]
     except Exception as e:
         logger.exception(f"Unexpected error creating strategy: {e}")
@@ -31,7 +33,7 @@ async def create_strategy(strategy_create: StrategyCreate):
 async def list_strategies():
     logger.info("GET /strategies - Listing strategies")
     try:
-        data, count = supabase.table("strategies").select("*").execute()
+        data, count = supabase.table(STRATEGIES_TABLE).select("*").execute()
         strategies_data = data[1]
     except Exception as e:
         logger.exception(f"Unexpected error listing strategies: {e}")
@@ -43,7 +45,7 @@ async def list_strategies():
 async def get_strategy(strategy_id: UUID):
     logger.info(f"GET /strategies/{strategy_id} - Getting strategy")
     try:
-        data, count = supabase.table("strategies").select("*").eq("id", str(strategy_id)).execute()
+        data, count = supabase.table(STRATEGIES_TABLE).select("*").eq("id", str(strategy_id)).execute()
         strategy_data = data[1][0] if data[1] else None
     except Exception as e:
         logger.exception(f"Unexpected error getting strategy {strategy_id}: {e}")
@@ -57,7 +59,7 @@ async def get_strategy(strategy_id: UUID):
 async def update_strategy(strategy_id: UUID, strategy_create: StrategyCreate):
     logger.info(f"PUT /strategies/{strategy_id} - Updating strategy: {strategy_create.name}")
     try:
-        data, count = supabase.table("strategies").update(strategy_create.dict()).eq("id", str(strategy_id)).execute()
+        data, count = supabase.table(STRATEGIES_TABLE).update(strategy_create.dict()).eq("id", str(strategy_id)).execute()
         strategy_data = data[1][0]
     except Exception as e:
         logger.exception(f"Unexpected error updating strategy {strategy_id}: {e}")
@@ -71,7 +73,7 @@ async def update_strategy(strategy_id: UUID, strategy_create: StrategyCreate):
 async def delete_strategy(strategy_id: UUID):
     logger.info(f"DELETE /strategies/{strategy_id} - Deleting strategy")
     try:
-        data, count = supabase.table("strategies").delete().eq("id", str(strategy_id)).execute()
+        data, count = supabase.table(STRATEGIES_TABLE).delete().eq("id", str(strategy_id)).execute()
     except Exception as e:
         logger.exception(f"Unexpected error deleting strategy {strategy_id}: {e}")
         raise

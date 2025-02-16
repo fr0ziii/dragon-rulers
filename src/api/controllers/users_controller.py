@@ -1,11 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from src.api.models.user import User, UserCreate
+from src.api.models.user import User, UserCreate, ID, USERNAME, EMAIL, CREATED_AT, UPDATED_AT
 from src.data.db import supabase
 import logging
 from uuid import UUID, uuid4
 import datetime
 import bcrypt
+
+USERS_TABLE = "users"
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +30,7 @@ async def create_user(user_create: UserCreate):
             "created_at": str(datetime.datetime.now()),
             "updated_at": str(datetime.datetime.now())
         }
-        data, count = supabase.table("users").insert(user_data).execute()
+        data, count = supabase.table(USERS_TABLE).insert(user_data).execute()
         user_data = data[1][0]
 
     except Exception as e:
@@ -37,11 +39,11 @@ async def create_user(user_create: UserCreate):
 
     if user_data:
         return User(
-            id=user_data.get(User.ID),
-            username=user_data.get(User.USERNAME),
-            email=user_data.get(User.EMAIL),
-            created_at=str(User.CREATED_AT),
-            updated_at=str(User.UPDATED_AT)
+            id=user_data.get(ID),
+            username=user_data.get(USERNAME),
+            email=user_data.get(EMAIL),
+            created_at=str(CREATED_AT),
+            updated_at=str(UPDATED_AT)
         )
     else:
         raise HTTPException(status_code=500, detail="Failed to create user")
@@ -50,7 +52,7 @@ async def create_user(user_create: UserCreate):
 async def get_user(user_id: UUID):
     logger.info(f"GET /users/{user_id} - Getting user")
     try:
-        data, count = supabase.table("users").select("*").eq("id", str(user_id)).execute()
+        data, count = supabase.table(USERS_TABLE).select("*").eq("id", str(user_id)).execute()
         user_data = data[1][0] if data[1] else None
     except Exception as e:
         logger.exception(f"Unexpected error getting user {user_id}: {e}")
@@ -78,7 +80,7 @@ async def update_user(user_id: UUID, user_create: UserCreate):
         }
         if user_create.password:
             update_data["password_hash"] = bcrypt.hashpw(user_create.password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-        data, count = supabase.table("users").update(update_data).eq("id", str(user_id)).execute()
+        data, count = supabase.table(USERS_TABLE).update(update_data).eq("id", str(user_id)).execute()
         user_data = data[1][0]
     except Exception as e:
         logger.exception(f"Unexpected error updating user {user_id}: {e}")
@@ -99,7 +101,7 @@ async def update_user(user_id: UUID, user_create: UserCreate):
 async def delete_user(user_id: UUID):
     logger.info(f"DELETE /users/{user_id} - Deleting user")
     try:
-        data, count = supabase.table("users").delete().eq("id", str(user_id)).execute()
+        data, count = supabase.table(USERS_TABLE).delete().eq("id", str(user_id)).execute()
     except Exception as e:
         logger.exception(f"Unexpected error deleting user {user_id}: {e}")
         raise

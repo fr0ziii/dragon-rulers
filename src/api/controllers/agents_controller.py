@@ -1,11 +1,13 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from src.api.models.agent import Agent, AgentCreate
+from src.api.models.agent import Agent, AgentCreate, ID, USER_ID, NAME, DESCRIPTION, STRATEGY_ID, CONFIGURATION, STATUS
 from src.data.db import supabase
 import logging
 from uuid import UUID, uuid4
 import datetime
 from src.api.services.common import publish_event, KafkaPublishError
+
+AGENTS_TABLE = "trading_agents"
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +25,7 @@ async def create_agent(agent_create: AgentCreate):
         if "id" not in agent_data or agent_data["id"] is None:
           agent_data["id"] = str(uuid4())
         agent_data["created_at"] = str(datetime.datetime.now())
-        data, count = supabase.table("trading_agents").insert(agent_data).execute()
+        data, count = supabase.table(AGENTS_TABLE).insert(agent_data).execute()
         logger.info(data)
         agent_data = data[1][0]  # Assuming the first item in the list is the result
 
@@ -37,7 +39,7 @@ async def create_agent(agent_create: AgentCreate):
         try:
             publish_event("agents", "agent.created", agent.dict())
         except KafkaPublishError as e:
-            logger.error(f"Failed to publish agent.created event: {e}")
+            logger.error(f"Failed to publish {agent.name} created event: {e}")
             # Decide how to handle this - retry, dead-letter queue, etc.
             # For now, just log and continue
         logger.info(f"Agent created: {agent}")
@@ -50,7 +52,7 @@ async def create_agent(agent_create: AgentCreate):
 async def list_agents():
     logger.info("GET /agents - Listing agents")
     try:
-      data, count = supabase.table("trading_agents").select("*").execute()
+      data, count = supabase.table(AGENTS_TABLE).select("*").execute()
       agents_data = data[1]
     except Exception as e:
         logger.exception(f"Unexpected error listing agents: {e}")
@@ -64,7 +66,7 @@ async def list_agents():
 async def get_agent(agent_id: UUID):
     logger.info(f"GET /agents/{agent_id} - Getting agent")
     try:
-        data, count = supabase.table("trading_agents").select("*").eq("id", str(agent_id)).execute()
+        data, count = supabase.table(AGENTS_TABLE).select("*").eq("id", str(agent_id)).execute()
         agent_data = data[1][0]  if data[1] else None
     except Exception as e:
         logger.exception(f"Unexpected error getting agent {agent_id}: {e}")
@@ -82,7 +84,7 @@ async def get_agent(agent_id: UUID):
 async def update_agent(agent_id: UUID, agent_create: AgentCreate):
     logger.info(f"PUT /agents/{agent_id} - Updating agent: {agent_create}")
     try:
-        data, count = supabase.table("trading_agents").update(agent_create.dict()).eq("id", str(agent_id)).execute()
+        data, count = supabase.table(AGENTS_TABLE).update(agent_create.dict()).eq("id", str(agent_id)).execute()
         agent_data = data[1][0]
 
     except Exception as e:
@@ -95,7 +97,7 @@ async def update_agent(agent_id: UUID, agent_create: AgentCreate):
         try:
             publish_event("agents", "agent.updated", agent.dict())
         except KafkaPublishError as e:
-            logger.error(f"Failed to publish agent.updated event: {e}")
+            logger.error(f"Failed to publish {agent.name} updated event: {e}")
             # Decide how to handle this - retry, dead-letter queue, etc.
         logger.info(f"Agent updated: {agent}")
         return agent
@@ -108,7 +110,7 @@ async def update_agent(agent_id: UUID, agent_create: AgentCreate):
 async def delete_agent(agent_id: UUID):
     logger.info(f"DELETE /agents/{agent_id} - Deleting agent")
     try:
-        data, count = supabase.table("trading_agents").delete().eq("id", str(agent_id)).execute()
+        data, count = supabase.table(AGENTS_TABLE).delete().eq("id", str(agent_id)).execute()
 
     except Exception as e:
         logger.exception(f"Unexpected error deleting agent {agent_id}: {e}")
