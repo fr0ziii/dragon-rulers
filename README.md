@@ -1,4 +1,6 @@
-# Algorithmic Trading Bot Framework
+![Banner](<cover.jpeg>) 
+
+# Dragon Rulers Multi-Agent DLT
 
 ## Description
 
