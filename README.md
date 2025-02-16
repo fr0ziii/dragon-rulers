@@ -13,6 +13,8 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
 *   **Python 3.10 or higher**
 *   **Node.js and npm**
 *   **Supabase Account:** Create a free account at [supabase.com](https://supabase.com).
+*   **Kafka:** Required for the event-driven architecture. You'll need a Kafka broker running. (Instructions for setting up Kafka are not yet included in this README, but will be added later.)
+*   **bcrypt:** Required for password hashing.
 
 ### Installation
 
@@ -36,7 +38,7 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
     pip install -r requirements.txt
     ```
 
-4.  **Navigate to the `src/ui` directory and install React dependencies:**
+4.  **Navigate to the `src/ui` directory and install NextJS dependencies:**
 
     ```bash
     cd src/ui
@@ -52,7 +54,7 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
         cp .env.example .env
         ```
 
-    *   Fill in the necessary environment variables in the `.env` file with your Supabase project credentials.
+    *   Fill in the necessary environment variables in the `.env` file with your Supabase project credentials and Kafka broker address (e.g., `KAFKA_BOOTSTRAP_SERVERS=localhost:9092`).
 
 ### Running the App
 
@@ -60,17 +62,17 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
 
     ```bash
     cd ../..  # Navigate back to the project root
-    uvicorn src.api.main:app --reload
+    uvicorn src.api.main:app --reload --port 8000
     ```
 
 2.  **Start the React frontend (in a separate terminal):**
 
     ```bash
     cd src/ui
-    npm start
+    npm run dev
     ```
 
-The React app will be available at `http://localhost:3000`.
+The React app will be available at `http://localhost:3002`.
 
 ---
 
@@ -85,13 +87,15 @@ The React app will be available at `http://localhost:3000`.
 ├── scripts/            # Utility scripts
 ├── src/                # Source code
 │   ├── api/            # FastAPI backend
-│   │   └── main.py     # FastAPI application
+│   │   └── main.py     # FastAPI application with API endpoints for users, agents, swarms, and strategies
 │   ├── agents/         # Trading agents
 │   │   └── agent.py    # Base Agent class
 │   ├── cli.py          # Command-line interface
 │   ├── connectors/     # Connectors to external services (e.g., blockchain, data providers)
 │   │   └── http/
 │   │       └── http_connector.py # Basic HTTP connector
+│   ├── consumers/      # Event consumers
+│   │   └── agent_consumer.py  # Consumes agent-related events from Kafka
 │   ├── core/           # Core framework components
 │   ├── data/           # Data models and database interactions
 │   │   ├── data.py     # Data classes
@@ -126,10 +130,10 @@ The React app will be available at `http://localhost:3000`.
 
 The following features and improvements are planned for future development:
 
-### Database Integration
+### Event-Driven Architecture
 
-*   Complete the Supabase integration, including connecting the application to the database.
-*   Set up Alembic for database migrations.
+*   Expand the event consumer to handle other events (e.g., `agent.updated`, `agent.deleted`).
+*   Integrate the event consumer with the database to store agent data.
 
 ### Enhanced Agent Capabilities
 
@@ -160,9 +164,13 @@ The following features and improvements are planned for future development:
 *   Improve the user interface for agent and swarm management.
 *   Add real-time monitoring of agent and swarm performance.
 *   Implement comprehensive reporting and analytics.
+*   Fully integrate Shadcn UI.
+*   Implement actual dashboard functionality.
 
 ### Testing and Deployment
 
+*   Implement more robust error handling.
+*   Add logging to more components.
 *   Implement thorough unit and integration tests.
 *   Develop backtesting and paper trading capabilities.
 *   Create deployment scripts and documentation for various cloud platforms.
@@ -176,6 +184,7 @@ The following features and improvements are planned for future development:
 *   Design the framework to be easily extensible with new features, strategies, and blockchain integrations.
 
 ---
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

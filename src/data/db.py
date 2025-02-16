@@ -34,10 +34,3 @@ def create_tables(conn):
     except Exception as e:
         print(f"Error creating tables: {e}")
         conn.rollback()
-
-
-if __name__ == "__main__":
-    conn = get_db_connection()
-    if conn:
-        create_tables(conn)
-        conn.close()
