@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="cover.jpeg" alt="Dragon Rulers Banner" width="100%" />
+  <img src="cover.jpeg" alt="Dragon Rulers Banner" width="100%" height="17.5rem" />
 </div>
 
 # Dragon Rulers Multi-Agent DLT
