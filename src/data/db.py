@@ -1,27 +1,27 @@
 import psycopg2
 import os
 from dotenv import load_dotenv
+from sqlalchemy.ext.declarative import declarative_base
 
 load_dotenv()
 
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
+Base = declarative_base()
+
+SUPABASE_PROJECT_ID = os.getenv("SUPABASE_PROJECT_ID")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
+
 
 def get_db_connection():
     """Establishes a connection to the database."""
     try:
         conn = psycopg2.connect(
-            host=DB_HOST,
-            database=DB_NAME,
-            user=DB_USER,
-            password=DB_PASSWORD
+            f"postgresql://postgres:{SUPABASE_ANON_KEY}@{SUPABASE_PROJECT_ID}.supabase.co:5432/postgres"
         )
         return conn
     except psycopg2.OperationalError as e:
         print(f"Error connecting to the database: {e}")
         return None
+
 
 def create_tables(conn):
     """Creates the database tables."""
@@ -34,6 +34,7 @@ def create_tables(conn):
     except Exception as e:
         print(f"Error creating tables: {e}")
         conn.rollback()
+
 
 if __name__ == "__main__":
     conn = get_db_connection()

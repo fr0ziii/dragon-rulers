@@ -45,6 +45,15 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
 
 5.  **Set up Supabase:** Follow the instructions in [`docs/supabase_setup.md`](docs/supabase_setup.md) to set up your Supabase project and link it to this repository.
 
+6.  **Environment Variables:**
+    *   Create a `.env` file in the root directory of the project by copying the provided `.env.example` file:
+
+        ```bash
+        cp .env.example .env
+        ```
+
+    *   Fill in the necessary environment variables in the `.env` file with your Supabase project credentials.
+
 ### Running the App
 
 1.  **Start the FastAPI backend:**

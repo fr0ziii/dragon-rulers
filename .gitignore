@@ -4,3 +4,6 @@ docs/
 .venv/
 *.pyc
 node_modules/
+.vscode/
+alembic.ini
+.env
