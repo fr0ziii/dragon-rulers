@@ -3,10 +3,10 @@ import './App.css';
 import axios from 'axios';
 
 function App() {
-    const [agents, setAgents] = useState([]);
-    const [selectedAgent, setSelectedAgent] = useState(null);
-    const [newName, setNewName] = useState('');
-    const [newRole, setNewRole] = useState('');
+  const [agents, setAgents] = useState([]);
+  const [selectedAgent, setSelectedAgent] = useState(null);
+  const [newName, setNewName] = useState('');
+  const [newRole, setNewRole] = useState('');
 
     useEffect(() => {
         const fetchAgents = async () => {
@@ -19,39 +19,49 @@ function App() {
         };
 
         fetchAgents();
-    }, []);
-
-    const handleCreateAgent = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8000/agents', {
-                name: newName,
-                role: newRole
-            });
-            setAgents([...agents, response.data]);
-            setNewName('');
-            setNewRole('');
-        } catch (error) {
-            console.error("Error creating agent:", error);
-        }
-    };
-
-    const handleUpdateAgent = async (event) => {
-        event.preventDefault();
-        if (!selectedAgent) return;
-        try {
-            const response = await axios.put(`http://localhost:8000/agents/${selectedAgent.id}`, {
-                name: newName,
-                role: newRole
-            });
-            setAgents(agents.map(agent => (agent.id === selectedAgent.id ? response.data : agent)));
+      }, []);
+    
+        const handleCreateAgent = async (event) => {
+            event.preventDefault();
+            try {
+                const response = await axios.post('http://localhost:8000/agents', {
+                    name: newName,
+                    role: newRole
+                });
+                setAgents([...agents, response.data]);
+                setNewName('');
+                setNewRole('');
+            } catch (error) {
+                console.error("Error creating agent:", error);
+            }
+        };
+    
+        const handleUpdateAgent = async (event) => {
+            event.preventDefault();
+            if (!selectedAgent) return;
+            try {
+                const response = await axios.put(`http://localhost:8000/agents/${selectedAgent.id}`, {
+                    name: newName,
+                    role: newRole
+                });
+                setAgents(agents.map(agent => (agent.id === selectedAgent.id ? response.data : agent)));
+                setSelectedAgent(null);
+                setNewName('');
+                setNewRole('');
+            } catch (error) {
+                console.error("Error updating agent:", error);
+            }
+        };
+        
+        const handleDeleteAgent = async (agentId) => {
+          try {
+            await axios.delete(`http://localhost:8000/agents/${agentId}`);
+            setAgents(agents.filter(agent => agent.id !== agentId));
             setSelectedAgent(null);
-            setNewName('');
-            setNewRole('');
-        } catch (error) {
-            console.error("Error updating agent:", error);
-        }
-    };
+          } catch (error) {
+            console.error("Error deleting agent:", error);
+          }
+        };
 
     const handleSelectAgent = (agent) => {
         setSelectedAgent(agent);
@@ -68,9 +78,10 @@ function App() {
                     {agents.map(agent => (
                         <li key={agent.id} onClick={() => handleSelectAgent(agent)}>
                             {agent.name} ({agent.role})
+                            <button onClick={(e) => { e.stopPropagation(); handleDeleteAgent(agent.id); }}>Delete</button>
                         </li>
-                    ))}
-                </ul>
+                      ))}
+                    </ul>
 
                 <h3>Create Agent</h3>
                 <form onSubmit={handleCreateAgent}>
