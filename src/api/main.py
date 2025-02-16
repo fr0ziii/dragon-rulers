@@ -1,8 +1,22 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import Dict, List
+from typing import Dict, List, Optional
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# --- CORS Configuration ---
+origins = [
+    "http://localhost:3002",  # Frontend URL
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Data Models ---
 class Agent(BaseModel):
@@ -23,6 +37,7 @@ next_agent_id = 1
 async def root():
     return {"message": "Welcome to the Trading Bot API"}
 
+
 @app.post("/agents", response_model=Agent)
 async def create_agent(agent_create: AgentCreate):
     global next_agent_id
@@ -31,9 +46,11 @@ async def create_agent(agent_create: AgentCreate):
     next_agent_id += 1
     return agent
 
+
 @app.get("/agents", response_model=List[Agent])
 async def list_agents():
     return list(agents.values())
+
 
 @app.get("/agents/{agent_id}", response_model=Agent)
 async def get_agent(agent_id: int):
@@ -41,15 +58,17 @@ async def get_agent(agent_id: int):
         raise HTTPException(status_code=404, detail="Agent not found")
     return agents[agent_id]
 
+
 @app.put("/agents/{agent_id}", response_model=Agent)
 async def update_agent(agent_id: int, agent_create: AgentCreate):
     if agent_id not in agents:
         raise HTTPException(status_code=404, detail="Agent not found")
-    
+
     agent = agents[agent_id]
     agent.name = agent_create.name
     agent.role = agent_create.role
     return agent
+
 
 @app.delete("/agents/{agent_id}")
 async def delete_agent(agent_id: int):
