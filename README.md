@@ -45,7 +45,7 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
     npm install
     ```
 
-5.  **Set up Supabase:** Follow the instructions in [`docs/supabase_setup.md`](docs/supabase_setup.md) to set up your Supabase project and link it to this repository.
+5.  **Set up Supabase:** Follow the instructions in Supabase documentation to set up your Supabase project and link it to this repository.
 
 6.  **Environment Variables:**
     *   Create a `.env` file in the root directory of the project by copying the provided `.env.example` file:
@@ -81,9 +81,7 @@ The React app will be available at `http://localhost:3002`.
 ```
 ├── .gitignore          # Specifies intentionally untracked files that Git should ignore
 ├── requirements.txt    # Python dependencies
-├── docs/               # Documentation files
 ├── infrastructure/     # Infrastructure-related files (e.g., Docker, Kubernetes)
-├── memory-bank/        # Memory bank for the AI agent
 ├── scripts/            # Utility scripts
 ├── src/                # Source code
 │   ├── api/            # FastAPI backend
