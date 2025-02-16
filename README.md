@@ -6,7 +6,29 @@
 
 ## Description
 
-This project aims to develop a flexible and scalable algorithmic trading bot framework for blockchain, leveraging swarm intelligence. It is designed for quantitative traders, software developers, financial analysts, and DeFi enthusiasts. The framework supports multiple blockchain networks, various trading strategies, and provides a user-friendly interface for managing trading bots.
+Dragon Rulers is a flexible and scalable algorithmic trading bot framework for blockchain, leveraging swarm intelligence. It is designed for:
+
+*   **Quantitative Traders:** Develop and deploy sophisticated trading strategies.
+*   **Software Developers:** Extend the framework with custom integrations and features.
+*   **Financial Analysts:** Analyze market data and backtest trading strategies.
+*   **DeFi Enthusiasts:** Explore and participate in the decentralized finance ecosystem.
+
+**Key Features:**
+
+*   **Multi-Blockchain Support:** Connect to various blockchain networks (e.g., Solana, NEAR, Binance Smart Chain, Polygon - planned).
+*   **Diverse Trading Strategies:** Implement custom strategies or use pre-built options (e.g., simple moving average, machine learning-based - planned).
+*   **Swarm Intelligence:** Utilize collective decision-making of multiple trading agents (planned).
+*   **User-Friendly Interface:** Manage bots and monitor performance through a React-based UI.
+*   **Event-Driven Architecture:** Uses Kafka for asynchronous communication and scalability.
+*   **Extensible Design:** Easily add new features, strategies, and blockchain integrations.
+
+**Benefits:**
+
+*   **Automation:** Automate trading activities and reduce manual intervention.
+*   **Scalability:** Scale trading operations by deploying multiple bots and swarms.
+*   **Flexibility:** Adapt to changing market conditions with dynamic strategies.
+*   **Data-Driven Decisions:** Leverage real-time market data and analysis.
+*   **Community-Driven:** Open-source project with contributions from the community.
 
 ---
 
@@ -18,7 +40,6 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
 *   **Node.js and npm**
 *   **Supabase Account:** Create a free account at [supabase.com](https://supabase.com).
 *   **Kafka:** Required for the event-driven architecture. You'll need a Kafka broker running. (Instructions for setting up Kafka are not yet included in this README, but will be added later.)
-*   **bcrypt:** Required for password hashing.
 
 ### Installation
 
@@ -49,7 +70,7 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
     npm install
     ```
 
-5.  **Set up Supabase:** Follow the instructions in Supabase documentation to set up your Supabase project and link it to this repository.
+5.  **Set up Supabase:** Follow the initial steps in the Supabase "Get Started" guide to create a new project: [https://supabase.com/docs/guides/getting-started](https://supabase.com/docs/guides/getting-started).  After creating the project, link it to this repository by following Supabase's instructions for linking to an existing project.
 
 6.  **Environment Variables:**
     *   Create a `.env` file in the root directory of the project by copying the provided `.env.example` file:
@@ -58,7 +79,7 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
         cp .env.example .env
         ```
 
-    *   Fill in the necessary environment variables in the `.env` file with your Supabase project credentials and Kafka broker address (e.g., `KAFKA_BOOTSTRAP_SERVERS=localhost:9092`).
+    *   Fill in the necessary environment variables in the `.env` file.  This includes your Supabase project credentials (URL and Anon Key) and your Kafka broker address (e.g., `KAFKA_BOOTSTRAP_SERVERS=localhost:9092`).
 
 ### Running the App
 
@@ -76,7 +97,7 @@ This project aims to develop a flexible and scalable algorithmic trading bot fra
     npm run dev
     ```
 
-The React app will be available at `http://localhost:3002`.
+The React app will be available at `http://localhost:3000`.
 
 ---
 
@@ -102,7 +123,7 @@ The React app will be available at `http://localhost:3002`.
 │   ├── data/           # Data models and database interactions
 │   │   ├── data.py     # Data classes
 │   │   ├── db.py       # Database connection and setup
-│   │   └── schema.sql  # Database schema definition
+│   │   ├── schema.sql  # Database schema definition
 │   ├── main.py         # Main application entry point (example)
 │   ├── strategies/     # Trading strategies
 │   │   ├── simple_moving_average.py # Example strategy
